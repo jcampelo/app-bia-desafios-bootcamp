@@ -1,0 +1,73 @@
+## Desafio do Dia 1
+
+### Levantando Instância EC2 `t3.micro` com App Server Docker Bia
+
+#### Passos Seguidos
+
+1. **Criação do Security Group**: 
+   - Nome: `bia-dev`
+   - Regra de entrada: Porta `3001`
+
+2. **Acessar o CloudShell**:
+   - No CloudShell, execute o seguinte comando para clonar o projeto:
+     ```bash
+     git clone https://github.com/jcampelo/bia.git
+     ```
+
+3. **Acessar o Subdiretório Scripts**:
+   - Navegue até o subdiretório `scripts` onde estão os scripts necessários.
+
+4. **Criar Role via Script de Comando**:
+   - Execute o script para criar a role:
+     ```bash
+     ./criar_role_ssm.sh
+     ```
+
+5. **Validar Recursos na Zona A para Lançamento de Instância**:
+   - Execute o script para validação:
+     ```bash
+     ./validar_recursos_zona_a.sh
+     ```
+
+6. **Lançar Instância EC2**:
+   - Execute o script para lançar a instância:
+     ```bash
+     ./lancar_ec2_zona_a.sh
+     ```
+
+7. **Acessar Instância via Terminal**:
+   - Use o seguinte comando para iniciar uma sessão na instância:
+     ```bash
+     ./start-session-bash.sh <id-da-instância>
+     ```
+
+8. **Executar Docker Compose Up**:
+   - No terminal da instância, execute:
+     ```bash
+     docker compose up -d
+     ```
+
+9. **Verificar Contêineres Criados**:
+   - Verifique os contêineres em execução:
+     ```bash
+     docker ps
+     ```
+
+10. **Checar Aplicação Bia Rodando no Browser**:
+    - Acesse no navegador: `https://<ip-público-da-instância>:3001`
+
+11. **Anexar Políticas à Role Criada (role-acesso-ssm)**:
+    - Use o serviço IAM para anexar as seguintes políticas:
+      - `AmazonEC2ContainerRegistryFullAccess`
+      - `AmazonECS_FullAccess`
+
+12. **Verificar Permissões via Console**:
+    - Dentro da sessão da instância, execute o comando:
+      ```bash
+      aws ecr describe-repositories
+      ```
+    - O retorno deve ser `"repositories": []`
+
+---
+
+Certifique-se de substituir `<id-da-instância>` e `<ip-público-da-instância>` pelos valores corretos.
